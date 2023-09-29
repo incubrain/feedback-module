@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <div class="flex flex-col gap-4 bg-black/30 rounded-lg shadow-lg">
     <span>
       {{ title }}
     </span>
-    <slot></slot>
+    <div>
+      <slot />
+    </div>
     <!-- <UButton>UButton Test</UButton> -->
   </div>
 </template>
