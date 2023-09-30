@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@nuxt/kit": "^3.7.4",
-    "@nuxt/ui": "^2.8.1"
+    "@nuxt/ui": "^2.8.1",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",

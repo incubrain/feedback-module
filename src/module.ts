@@ -23,9 +23,9 @@ export default defineNuxtModule<ModuleOptions>({
     // nuxt.options.build.transpile.push("@nuxt/ui");
     // Transpile runtime
     const runtimeDir = resolve("./runtime");
+    // required to make installModule modules work
     nuxt.options.build.transpile.push(runtimeDir);
-
-    // await installModule("@nuxt/ui");
+    nuxt.options.build.transpile.push("zod");
 
     addComponent({
       name: "FeedbackWidget", // name of the component to be used in vue templates
@@ -35,19 +35,15 @@ export default defineNuxtModule<ModuleOptions>({
 
     // We can inject our CSS file which includes Tailwind's directives
     nuxt.options.css.push(resolve(runtimeDir, "assets/styles.css"));
+    // We need to add our components directory to Tailwind's config
     nuxt.hook("tailwindcss:config", function (tailwindConfig) {
       tailwindConfig.content.files.push(
         resolve(runtimeDir, "components/**/*.{vue,js,ts}")
       );
-      console.log("tailwindConfilg: ", tailwindConfig.content.files);
     });
 
+    // !todo figure out if we can import only specific components/features
     await installModule("@nuxt/ui");
-    // await installModule("@nuxtjs/tailwindcss", {
-    //   // module configuration
-    //   exposeConfig: true,
-    // },
-    // });
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     // addPlugin(resolver.resolve("./runtime/plugin"));
