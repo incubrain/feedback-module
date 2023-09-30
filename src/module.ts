@@ -34,21 +34,20 @@ export default defineNuxtModule<ModuleOptions>({
     });
 
     // We can inject our CSS file which includes Tailwind's directives
-    nuxt.options.css.push(resolve("./runtime/assets/styles.css"));
-
-    await installModule("@nuxtjs/tailwindcss", {
-      // module configuration
-      exposeConfig: true,
-      config: {
-        darkMode: "class",
-        content: {
-          files: [
-            resolve(runtimeDir, "components/**/*.{vue,mjs,ts}"),
-            resolve(runtimeDir, "*.{mjs,js,ts}"),
-          ],
-        },
-      },
+    nuxt.options.css.push(resolve(runtimeDir, "assets/styles.css"));
+    nuxt.hook("tailwindcss:config", function (tailwindConfig) {
+      tailwindConfig.content.files.push(
+        resolve(runtimeDir, "components/**/*.{vue,js,ts}")
+      );
+      console.log("tailwindConfilg: ", tailwindConfig.content.files);
     });
+
+    await installModule("@nuxt/ui");
+    // await installModule("@nuxtjs/tailwindcss", {
+    //   // module configuration
+    //   exposeConfig: true,
+    // },
+    // });
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     // addPlugin(resolver.resolve("./runtime/plugin"));
