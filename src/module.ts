@@ -1,3 +1,4 @@
+import { defu } from "defu";
 import {
   defineNuxtModule,
   addPlugin,
@@ -7,7 +8,9 @@ import {
 } from "@nuxt/kit";
 
 // Module options TypeScript interface definition
-export interface ModuleOptions {}
+export interface ModuleOptions {
+  ghApiKey: string | undefined;
+}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
@@ -15,8 +18,20 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: "feedback",
   },
   // Default configuration options of the Nuxt module
-  defaults: {},
+  defaults: {
+    ghApiKey: process.env.GH_API_KEY || undefined,
+  },
   async setup(options, nuxt) {
+    // Default runtimeConfig
+    nuxt.options.runtimeConfig.public.feedback = defu(
+      nuxt.options.runtimeConfig.public.feedback,
+      options
+    );
+    nuxt.options.runtimeConfig.feedback = defu(
+      nuxt.options.runtimeConfig.feedback,
+      options
+    );
+
     const { resolve, resolvePath } = createResolver(import.meta.url);
 
     // From the runtime directory
@@ -25,7 +40,10 @@ export default defineNuxtModule<ModuleOptions>({
     const runtimeDir = resolve("./runtime");
     // required to make installModule modules work
     nuxt.options.build.transpile.push(runtimeDir);
-    nuxt.options.build.transpile.push("zod");
+    nuxt.options.build.transpile.push("zod", "octokit");
+
+    // I think this is importing server components
+    nuxt.options.alias["#feedback"] = runtimeDir;
 
     addComponent({
       name: "FeedbackWidget", // name of the component to be used in vue templates
