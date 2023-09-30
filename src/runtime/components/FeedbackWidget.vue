@@ -3,12 +3,14 @@
     <div>
       <slot />
     </div>
-    <UButton>{{ title }}</UButton>
+    <UButton @click="github.getUser">Test GH</UButton>
+    <span> {{ github.user }}</span>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, computed, defineComponent, toRaw, toRef } from "vue";
+import useGithub from "../composables/useGithub";
 
 export default defineComponent({
   props: {
@@ -20,6 +22,11 @@ export default defineComponent({
   // emits: ["update:modelValue"],
   setup(props, { emit, attrs: $attrs }) {
     // perform most logic here
+    const github = useGithub();
+
+    return {
+      github,
+    };
   },
 });
 </script>
