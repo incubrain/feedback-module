@@ -8,9 +8,10 @@
               Write Feedback
             </label>
             <textarea
+              v-model="feedbackText"
               class="w-full h-32 p-2 leading-6 border rounded shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500"
-            />
-            <UButton class="mt-2" @click="popup = false">
+            ></textarea>
+            <UButton class="mt-2" @click="submitFeedback">
               Submit
             </UButton>
           </div>
@@ -30,7 +31,20 @@ export default {
   data() {
     return {
       popup: false,
+      feedbackText: '',
     };
+  },
+  methods: {
+    async submitFeedback() {
+      const text = this.feedbackText;
+      
+      try {
+        console.log("Submitting feedback:", text);
+        
+      } catch (error) {
+        console.error("Error submitting feedback:", error);
+      }
+    },
   },
 };
 </script>
