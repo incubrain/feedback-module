@@ -50,6 +50,12 @@ export default defineNuxtModule<ModuleOptions>({
       filePath: resolve("runtime/components/FeedbackWidget.vue"),
       global: true, // register the component globally
     });
+    
+    addComponent({
+      name: "FeedbackInput", // name of the component to be used in vue templates
+      filePath: resolve("runtime/components/FeedbackInput.vue"),
+      global: true, // register the component globally
+    });
 
     // We can inject our CSS file which includes Tailwind's directives
     nuxt.options.css.push(resolve(runtimeDir, "assets/styles.css"));
