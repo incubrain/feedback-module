@@ -67,10 +67,85 @@ export default function () {
     }
   }
 
+  async function getAllCards() {
+    try {
+      const response = await octokit.graphql(
+        `
+        query{
+            node(id: "PVT_kwDOBtC2ps4AWJcL") {
+                ... on ProjectV2 {
+                  items(first: 20) {
+                    nodes{
+                      id
+                      fieldValues(first: 8) {
+                        nodes{                
+                          ... on ProjectV2ItemFieldTextValue {
+                            text
+                            field {
+                              ... on ProjectV2FieldCommon {
+                                name
+                              }
+                            }
+                          }
+                          ... on ProjectV2ItemFieldDateValue {
+                            date
+                            field {
+                              ... on ProjectV2FieldCommon {
+                                name
+                              }
+                            }
+                          }
+                          ... on ProjectV2ItemFieldSingleSelectValue {
+                            name
+                            field {
+                              ... on ProjectV2FieldCommon {
+                                name
+                              }
+                            }
+                          }
+                        }              
+                      }
+                      content{              
+                        ... on DraftIssue {
+                          title
+                          body
+                        }
+                        ...on Issue {
+                          title
+                          assignees(first: 10) {
+                            nodes{
+                              login
+                            }
+                          }
+                        }
+                        ...on PullRequest {
+                          title
+                          assignees(first: 10) {
+                            nodes{
+                              login
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+      `
+      );
+
+      console.log("Project Item ID:", response);
+    } catch (error) {
+      console.error("Error creating draft issue:", error.message);
+    }
+  }
+
   return {
     user,
     getUser,
     getProject,
     createDraftIssue,
+    getAllCards,
   };
 }
