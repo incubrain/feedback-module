@@ -134,8 +134,8 @@ export default function () {
             }
       `
       );
-
-      console.log("Project Item ID:", response);
+      return response.node.items.nodes;
+      console.log("Project Item ID:", response.node.items.nodes);
     } catch (error) {
       console.error("Error creating draft issue:", error.message);
     }

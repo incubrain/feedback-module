@@ -57,6 +57,18 @@ export default defineNuxtModule<ModuleOptions>({
       global: true, // register the component globally
     });
 
+    addComponent({
+      name: "KanbanBoard", // name of the component to be used in vue templates
+      filePath: resolve("runtime/components/KanbanBoard.vue"),
+      global: true, // register the component globally
+    });
+
+    addComponent({
+      name: "KanbanCard", // name of the component to be used in vue templates
+      filePath: resolve("runtime/components/KanbanCard.vue"),
+      global: true, // register the component globally
+    });
+
     // We can inject our CSS file which includes Tailwind's directives
     nuxt.options.css.push(resolve(runtimeDir, "assets/styles.css"));
     // We need to add our components directory to Tailwind's config
