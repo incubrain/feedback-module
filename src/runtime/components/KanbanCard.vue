@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white/10 p-4 my-4 rounded-md cursor-pointer" @click="isOpen = true">
+  <div class="dark:bg-white/10 bg-gray-200 p-4 my-4 rounded-md cursor-pointer" @click="isOpen = true">
     <div class="flex justify-between">
-      <h3 class="text-sm font-semibold text-white">{{ feedback.content.title }}</h3>
+      <h3 class="text-sm font-semibold text-black dark:text-white">{{ feedback.content.title }}</h3>
     </div>
 
     <div>
@@ -17,24 +17,24 @@
             </div>
             <div class="mt-4 flex justify-between">
             <div class="w-1/2 mb-2">
-              <span class="text-gray-400 mr-4">ID</span>
-              <p class="text-sm text-gray-200 font-semibold">{{ feedback.id }}</p>
+              <span class="text-gray-800 dark:text-gray-400 mr-4">ID</span>
+              <p class="text-sm text-gray-400 dark:text-gray-200 font-semibold">{{ feedback.id }}</p>
             </div>
             <div class="w-1/2 mb-2">
-              <span class="text-gray-400 mr-4">Status</span>
-              <p class="text-sm text-gray-200 font-semibold">Status</p>
+              <span class="text-gray-800 dark:text-gray-400 mr-4">Status</span>
+              <p class="text-sm text-gray-400 dark:text-gray-200 font-semibold">Status</p>
             </div>
           </div>
           <div class="mt-2 flex justify-between">
             <div class="w-1/2 mb-2">
-              <span class="text-gray-400 mr-4">Category</span>
+              <span class="text-gray-800 dark:text-gray-400 mr-4">Category</span>
               <UBadge color="blue" variant="soft" class="font-semibold">
                 {{ category }}
               </UBadge>
             </div>
             
             <div class="w-1/2 mb-2">
-              <span class="text-gray-400 mr-4">Priority</span>
+              <span class="text-gray-800 dark:text-gray-400 mr-4">Priority</span>
               <UBadge color="red" variant="soft" class="font-semibold">
                 Priority
               </UBadge>
@@ -42,12 +42,12 @@
           </div>
           </template>
           <div class="w-full mb-2">
-              <span class="text-gray-400 mr-4">Description</span>
-              <p class="text-sm text-gray-200 font-semibold">{{ feedback.content.body }}</p>
+              <span class="text-gray-800 dark:text-gray-400 mr-4">Description</span>
+              <p class="text-sm text-gray-400 dark:text-gray-200 font-semibold">{{ feedback.content.body }}</p>
             </div>
           <template #footer>
             <div class="mb-4">
-              <span class="text-gray-400 mt-2">Comments coming soon</span>
+              <span class="text-gray-800 dark:text-gray-400 mt-2">Comments coming soon</span>
             </div>
           </template>
         </UCard>

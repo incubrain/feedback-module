@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-start">
-    <div v-for="(column, category) in columns" :key="category" class="w-1/5 p-4 text-white">
-      <h2 class="text-md font-semibold text-white">{{ category }}</h2>
+    <div v-for="(column, category) in columns" :key="category" class="w-1/5 p-4 text-black dark:text-white">
+      <h2 class="text-md font-semibold text-black dark:text-white">{{ category }}</h2>
       <KanbanCard v-for="item in column" :key="item.id" :feedback="item" />
     </div>
   </div>
