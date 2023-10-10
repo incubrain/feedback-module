@@ -57,6 +57,19 @@ export const useFeedback = () => {
         projectId: gh.project_id
       })
       console.log('Project Item ID:', response.node.items.nodes)
+      const cards = response?.node?.items?.nodes || []
+      console.log('Cards:', cards)
+
+      const formattedCards = cards.map((card) => {
+        const { title, body } = card.content || {}
+        const statusField = card.fieldValues?.nodes[1]
+
+        const status = statusField?.name || 'Unknown' // Replace "Unknown" with a default value if needed
+
+        return { title, body, status }
+      })
+
+      console.log('Formatted Cards:', formattedCards)
       return response.node.items.nodes
     } catch (error) {
       console.error('Error creating draft issue:', error.message)
