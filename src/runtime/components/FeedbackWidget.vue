@@ -9,26 +9,26 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, defineComponent, toRaw, toRef } from "vue";
-import useGithub from "../composables/useGithub";
+import { ref, computed, defineComponent, toRaw, toRef } from 'vue'
+import useGithub from '../composables/useGithub'
 
 export default defineComponent({
   props: {
     title: {
       type: String,
-      default: "Feedback",
-    },
+      default: 'Feedback'
+    }
   },
   // emits: ["update:modelValue"],
   setup(props, { emit, attrs: $attrs }) {
     // perform most logic here
-    const github = useGithub();
+    const github = useGithub()
 
     return {
-      github,
-    };
-  },
-});
+      github
+    }
+  }
+})
 </script>
 
 <style scoped></style>

@@ -1,29 +1,29 @@
-import { useRuntimeConfig } from "#imports";
-import { Octokit } from "@octokit/core";
-import { ref } from "vue";
+import { useRuntimeConfig } from '#imports'
+import { Octokit } from '@octokit/core'
+import { ref } from 'vue'
 
 export default function () {
-  const user = ref(null);
-  const config = useRuntimeConfig();
-  const apiKey = config.public.feedback.ghApiKey;
+  const user = ref(null)
+  const config = useRuntimeConfig()
+  const apiKey = config.public.feedback.ghApiKey
   const octokit = new Octokit({
     auth: apiKey,
     headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  })
   async function getUser() {
     // Create a personal access token at https://github.com/settings/tokens/new?scopes=repo
     const {
-      viewer: { login },
+      viewer: { login }
     } = await octokit.graphql(`{
       viewer {
         login
       }
-    }`);
+    }`)
 
-    console.log(`Hello, ${login}!`, login);
-    user.value = login;
+    console.log(`Hello, ${login}!`, login)
+    user.value = login
     // Compare: https://docs.github.com/en/rest/reference/users#get-the-authenticated-user
   }
 
@@ -35,19 +35,19 @@ export default function () {
             id
           }
         }
-      }`);
+      }`)
 
-      console.log("Fetched project id successfully:", response);
+      console.log('Fetched project id successfully:', response)
     } catch (error) {
-      console.error("Error fetching project id:", error.message);
+      console.error('Error fetching project id:', error.message)
     }
   }
 
   async function createDraftIssue(title: string, body: string) {
     const variables = {
       title: title,
-      body: body,
-    };
+      body: body
+    }
     try {
       const response = await octokit.graphql(
         `mutation($title: String!, $body: String!) {
@@ -59,11 +59,11 @@ export default function () {
         }
       `,
         variables
-      );
+      )
 
-      console.log("Project Item ID:", response);
+      console.log('Project Item ID:', response)
     } catch (error) {
-      console.error("Error creating draft issue:", error.message);
+      console.error('Error creating draft issue:', error.message)
     }
   }
 
@@ -133,11 +133,11 @@ export default function () {
               }
             }
       `
-      );
-      return response.node.items.nodes;
-      console.log("Project Item ID:", response.node.items.nodes);
+      )
+      return response.node.items.nodes
+      console.log('Project Item ID:', response.node.items.nodes)
     } catch (error) {
-      console.error("Error creating draft issue:", error.message);
+      console.error('Error creating draft issue:', error.message)
     }
   }
 
@@ -146,6 +146,6 @@ export default function () {
     getUser,
     getProject,
     createDraftIssue,
-    getAllCards,
-  };
+    getAllCards
+  }
 }
