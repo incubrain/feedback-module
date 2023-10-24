@@ -1,7 +1,7 @@
 {
-  "name": "feedback",
-  "version": "1.0.0",
-  "description": "My new Nuxt module",
+  "name": "@nuxt/feedback",
+  "version": "0.1.0",
+  "description": "Nuxt Feedback Module Using GitHub Projects",
   "repository": "incubrain/feedback-module",
   "license": "MIT",
   "type": "module",
