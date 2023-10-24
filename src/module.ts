@@ -35,7 +35,6 @@ export default defineNuxtModule<ModuleOptions>({
     }
   },
   async setup(options, nuxt) {
-
     // Private runtimeConfig
     nuxt.options.runtimeConfig.feedback = defu(nuxt.options.runtimeConfig.feedback, options)
 

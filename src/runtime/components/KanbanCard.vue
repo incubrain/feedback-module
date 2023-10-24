@@ -4,7 +4,7 @@
     @click="isOpen = true"
   >
     <div class="flex justify-between">
-      <h3 class="text-sm font-semibold text-black dark:text-white">{{ feedback.content.title }}</h3>
+      <h3 class="text-sm font-semibold text-black dark:text-white">{{ feedback }}</h3>
     </div>
 
     <div>
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, PropType } from 'vue'
 import { OldFeedback } from '../types/feedback'
 import KanbanModal from './KanbanModal.vue'
 
@@ -24,9 +24,8 @@ const isOpen = ref(false)
 
 defineProps({
   feedback: {
-    type: Object as OldFeedback,
+    type: Object as PropType<OldFeedback>,
     required: true
   }
 })
-
 </script>

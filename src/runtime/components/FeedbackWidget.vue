@@ -31,6 +31,7 @@
 import { reactive, ref } from 'vue'
 import { useFeedback } from '../composables/useFeedback'
 // !TODO: add validation and state https://ui.nuxt.com/forms/form
+const fb = useFeedback()
 
 const isOpen = ref(false)
 const feedback = reactive({
@@ -42,8 +43,15 @@ function toggle() {
   isOpen.value = !isOpen.value
 }
 
+function resetForm() {
+  Object.assign(feedback, {
+    title: '',
+    body: ''
+  })
+  isOpen.value = !isOpen.value
+}
+
 function submitFeedback() {
-  const fb = useFeedback()
   console.log('Submitting feedback:', feedback)
   try {
     fb.createFeedback(feedback)
@@ -53,13 +61,6 @@ function submitFeedback() {
   }
 }
 
-function resetForm() {
-  Object.assign(feedback, {
-    title: '',
-    body: ''
-  })
-  isOpen.value = !isOpen.value
-}
 </script>
 
 <style scoped></style>
