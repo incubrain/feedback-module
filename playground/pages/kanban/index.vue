@@ -14,7 +14,8 @@ async function created() {
   // Call the getFeedback function to fetch data
   try {
     const cards = await getFeedback()
-    feedbackData.value = cards // Assign the fetched data to feedbackData
+    console.log('playground cards', cards)
+    feedbackData.value = cards.body // Assign the fetched data to feedbackData
   } catch (error) {
     console.error('Error fetching cards:', error)
   }
