@@ -9,7 +9,7 @@ const project = `
 `
 
 // !TODO: this seems bloated and should be refactored if possible
-const projectIssues = `
+const old = `
 query ($projectId: ID!) {
   node(id: $projectId) {
       ... on ProjectV2 {
@@ -45,18 +45,6 @@ query ($projectId: ID!) {
               }              
             }
             content{              
-              ... on DraftIssue {
-                title
-                body
-              }
-              ...on Issue {
-                title
-                assignees(first: 10) {
-                  nodes{
-                    login
-                  }
-                }
-              }
               ...on PullRequest {
                 title
                 assignees(first: 10) {
@@ -64,6 +52,38 @@ query ($projectId: ID!) {
                     login
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+// Issues - https://docs.github.com/en/graphql/reference/objects#issue
+// Issue Comments - https://docs.github.com/en/graphql/reference/objects#issuecomment
+// Draft Issues - https://docs.github.com/en/graphql/reference/objects#draftissue
+const projectIssues = `
+query ($projectId: ID!) {
+  node(id: $projectId) {
+      ... on ProjectV2 {
+        items(first: 20) {
+          nodes{
+            id
+            content{              
+              ...on Issue {
+                title
+                body
+                closed
+                createdAt
+                updatedAt
+                publishedAt
+              }
+              ... on DraftIssue {
+                title
+                body
+                updatedAt
+                createdAt
               }
             }
           }
