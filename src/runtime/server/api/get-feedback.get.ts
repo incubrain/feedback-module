@@ -19,10 +19,8 @@ export default defineEventHandler(async () => {
     const cards = response?.node?.items?.nodes || []
 
     const formattedCards = cards.map((card) => {
-      const { title, body } = card.content
-      console.log('Card:', title, body, card)
-
-      return { title, body }
+      console.log('Card:', card)
+      return card.content
     })
 
     return {

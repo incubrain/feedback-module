@@ -3,13 +3,11 @@ import { z } from 'zod'
 export const newFeedbackSchema = z.object({
   title: z.string(),
   body: z.string(),
-  user_id: z.string().optional(),
-  category_id: z.number()
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional()
 })
 
 export const oldFeedbackSchema = newFeedbackSchema.extend({
-  created_at: z.string().optional(),
-  updated_at: z.string().optional(),
   votes_weighted: z.number(),
   gh_issue: z.string(),
   status_id: z.number(),
@@ -19,5 +17,8 @@ export const oldFeedbackSchema = newFeedbackSchema.extend({
   votes: z.number()
 })
 
+export const oldFeedbackArraySchema = z.array(newFeedbackSchema).nonempty()
+
 export type OldFeedback = z.infer<typeof oldFeedbackSchema>
+export type OldFeedbackArray = z.infer<typeof oldFeedbackArraySchema>
 export type NewFeedback = z.infer<typeof newFeedbackSchema>
