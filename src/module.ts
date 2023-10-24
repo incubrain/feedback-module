@@ -5,7 +5,8 @@ import {
   addImportsDir,
   createResolver,
   addComponent,
-  installModule
+  installModule,
+  addServerHandler
 } from '@nuxt/kit'
 
 // Module options for nuxt.config.ts
@@ -19,8 +20,11 @@ export interface ModuleOptions {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'feedback',
-    configKey: 'feedback'
+    name: '@nuxt/feedback',
+    configKey: 'feedback',
+    compatibility: {
+      nuxt: '^3.7.0'
+    }
   },
   // Default configuration options of the Nuxt module
   defaults: {
@@ -31,17 +35,9 @@ export default defineNuxtModule<ModuleOptions>({
     }
   },
   async setup(options, nuxt) {
-    // Public runtimeConfig
-    // !TODO: remove api key from public
-    nuxt.options.runtimeConfig.public.feedback = defu(
-      nuxt.options.runtimeConfig.public.feedback,
-      options
-    )
 
     // Private runtimeConfig
-    nuxt.options.runtimeConfig.feedback = defu(nuxt.options.runtimeConfig.feedback, {
-      api_key: options.github.api_key
-    })
+    nuxt.options.runtimeConfig.feedback = defu(nuxt.options.runtimeConfig.feedback, options)
 
     const { resolve, resolvePath } = createResolver(import.meta.url)
 
@@ -66,6 +62,17 @@ export default defineNuxtModule<ModuleOptions>({
     // entire composables folder is auto-imported for use in users application
     addImportsDir(resolve(runtimeDir, 'composables'))
 
+    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
+    addServerHandler({
+      route: '/api/post-feedback',
+      handler: resolve(runtimeDir, 'server/api/post-feedback.post')
+    })
+
+    addServerHandler({
+      route: '/api/get-feedback',
+      handler: resolve(runtimeDir, 'server/api/get-feedback.get')
+    })
+
     // We can inject our CSS file which includes Tailwind's directives
     nuxt.options.css.push(resolve(runtimeDir, 'assets/styles.css'))
     // We need to add our components directory to Tailwind's config
@@ -76,7 +83,6 @@ export default defineNuxtModule<ModuleOptions>({
     // !todo figure out if we can import only specific components/features
     await installModule('@nuxt/ui')
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     // addPlugin(resolver.resolve("./runtime/plugin"));
   }
 })
