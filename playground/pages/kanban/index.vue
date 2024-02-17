@@ -1,6 +1,6 @@
 <template>
   <div>
-    <KanbanBoard :feedback="feedbackData" />
+    testung
   </div>
 </template>
 
@@ -8,20 +8,4 @@
 import { ref, onMounted } from 'vue'
 import { useFeedback } from '#imports'
 const feedbackData = ref([]) // Initialize an empty array to hold the data
-const { getFeedback } = useFeedback() // Import the getFeedback function from the useFeedback composable
-
-async function created() {
-  // Call the getFeedback function to fetch data
-  try {
-    const cards = await getFeedback()
-    console.log('playground cards', cards)
-    feedbackData.value = cards.body // Assign the fetched data to feedbackData
-  } catch (error) {
-    console.error('Error fetching cards:', error)
-  }
-}
-
-onMounted(() => {
-  created()
-})
 </script>

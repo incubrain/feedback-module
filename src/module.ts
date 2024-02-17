@@ -1,7 +1,7 @@
 import { defu } from 'defu'
 import {
   defineNuxtModule,
-  // addPlugin,
+  addPlugin,
   addImportsDir,
   createResolver,
   addComponent,
@@ -11,11 +11,9 @@ import {
 
 // Module options for nuxt.config.ts
 export interface ModuleOptions {
-  github: {
-    api_key: string | undefined
-    project_id: string | undefined
-    organisation_id: string | undefined
-  }
+  TRELLO_API_KEY: string | undefined
+  TRELLO_API_TOKEN: string | undefined
+  TRELLO_LIST_ID: string | undefined
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -28,11 +26,9 @@ export default defineNuxtModule<ModuleOptions>({
   },
   // Default configuration options of the Nuxt module
   defaults: {
-    github: {
-      api_key: (process.env.GH_API_KEY as string) || undefined,
-      project_id: (process.env.GH_PROJECT_ID as string) || undefined,
-      organisation_id: (process.env.GH_ORG_ID as string) || undefined // Not mandatory
-    }
+    TRELLO_API_KEY: (process.env.TRELLO_API_KEY as string) || undefined,
+    TRELLO_API_TOKEN: (process.env.TRELLO_API_TOKEN as string) || undefined,
+    TRELLO_LIST_ID: (process.env.TRELLO_LIST_ID as string) || undefined // Not mandatory
   },
   async setup(options, nuxt) {
     // Private runtimeConfig
@@ -43,13 +39,13 @@ export default defineNuxtModule<ModuleOptions>({
     // required to make installModule modules work
     const runtimeDir = resolve('./runtime')
     nuxt.options.build.transpile.push(runtimeDir)
-    nuxt.options.build.transpile.push('zod', 'octokit')
+    nuxt.options.build.transpile.push('zod', 'ua-parser-js', 'html2canvas')
 
     // I think this is for exporting server components for use in the users application
     nuxt.options.alias['#feedback'] = runtimeDir
 
     // Add auto imports
-    const components = ['FeedbackWidget', 'KanbanBoard', 'KanbanCard']
+    const components = ['FeedbackWidget']
     for (const component of components) {
       addComponent({
         name: component, // name of the component to be used in vue templates
@@ -63,13 +59,8 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     addServerHandler({
-      route: '/api/post-feedback',
-      handler: resolve(runtimeDir, 'server/api/post-feedback.post')
-    })
-
-    addServerHandler({
-      route: '/api/get-feedback',
-      handler: resolve(runtimeDir, 'server/api/get-feedback.get')
+      route: '/api/feedback',
+      handler: resolve(runtimeDir, 'server/api/feedback.post.ts')
     })
 
     // We can inject our CSS file which includes Tailwind's directives
@@ -82,6 +73,16 @@ export default defineNuxtModule<ModuleOptions>({
     // !todo figure out if we can import only specific components/features
     await installModule('@nuxt/ui')
 
-    // addPlugin(resolver.resolve("./runtime/plugin"));
+    // add specific componentts From a library
+    //  addComponent({
+    //   name: 'MyAwesomeComponent', // name of the component to be used in vue templates
+    //   export: 'MyAwesomeComponent', // (optional) if the component is a named (rather than default) export
+    //   filePath: '@vue/awesome-components'
+    // })
+
+    addPlugin({
+      src: resolve('./runtime/plugin.ts'),
+      mode: 'client'
+    })
   }
 })

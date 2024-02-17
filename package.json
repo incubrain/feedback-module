@@ -31,7 +31,6 @@
     "@nuxt/kit": "^3.7.4",
     "@nuxt/ui": "^2.8.1",
     "defu": "^6.1.2",
-    "octokit": "^3.1.1",
     "zod": "^3.22.2"
   },
   "devDependencies": {
@@ -41,9 +40,12 @@
     "@nuxt/schema": "^3.7.4",
     "@nuxt/test-utils": "^3.7.4",
     "@types/node": "^18.18.0",
+    "@vueuse/nuxt": "^10.7.2",
     "changelogen": "^0.5.5",
     "eslint": "^8.50.0",
+    "html2canvas": "^1.4.1",
     "nuxt": "^3.7.4",
+    "ua-parser-js": "^1.0.37",
     "vitest": "^0.33.0"
   }
 }

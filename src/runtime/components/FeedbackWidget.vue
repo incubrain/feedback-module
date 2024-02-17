@@ -1,66 +1,148 @@
 <template>
-  <div>
-    <slot
-      name="toggle"
-      v-bind="toggle"
-    />
-    <USlideover
-      v-model="isOpen"
-      :ui="{ padding: 'p-4 lg:p-8' }"
+  <div class="w-full h-full">
+    <div
+      class="fixed top-2 right-2 md:top-4 md:right-4 z-50 bg-gray-100 dark:bg-gray-950 rounded-md p-2"
     >
-      <UForm
-        class="flex flex-col gap-6"
-        @submit="submitFeedback"
-      >
-        <slot name="cta" />
+      <div class="flex flex-col justify-end gap-2">
+        <button
+          @click="isOpen = !isOpen"
+          class="icon-tool text-sm flex justify-center items-center gap-2"
+        >
+          <UIcon name="i-heroicons-cog-6-tooth-20-solid" />
+          {{ !userDetailsCookie ? 'please update' : 'completed' }}
+        </button>
+        <UModal v-model="isOpen">
+          <div class="p-4 flex flex-col gap-2">
+            <input
+              v-model="userDetails.github"
+              placeholder="GitHub Username"
+              class="px-2 py-1"
+            />
+            <div class="flex gap-2">
+              <button
+                @click="updateUserDetails"
+                class="icon-tool"
+              >
+                Save Details
+              </button>
+              <button
+                @click="clearUserDetails"
+                class="icon-tool"
+              >
+                Clear Details
+              </button>
+            </div>
+          </div>
+        </UModal>
+        <USelectMenu
+          v-model="newFeedback.category"
+          :options="categories"
+          placeholder="Select Category"
+          value-attribute="id"
+          option-attribute="label"
+        />
         <UInput
-          v-model="feedback.title"
+          color="white"
+          variant="outline"
           placeholder="Title"
+          v-model="newFeedback.title"
+          minlength="5"
         />
+
         <UTextarea
-          v-model="feedback.body"
-          placeholder="Body"
+          color="white"
+          variant="outline"
+          autoresize
+          placeholder="More information"
+          v-model="newFeedback.body"
+          minlength="200"
         />
-        <UButton type="submit"> Submit </UButton>
-      </UForm>
-    </USlideover>
+
+        <div class="flex gap-2">
+          <button
+            class="icon-tool"
+            @click="toggleCanvas"
+          >
+            <UIcon name="i-heroicons-paint-brush-16-solid" />
+          </button>
+          <UButton
+            @click="addFeedback(newFeedback)"
+            label="Submit"
+            color="white"
+          />
+        </div>
+      </div>
+    </div>
+
+    <FeedbackCanvas v-show="canvasVisible" />
   </div>
 </template>
 
-<script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import { useFeedback } from '../composables/useFeedback'
-// !TODO: add validation and state https://ui.nuxt.com/forms/form
-const fb = useFeedback()
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import FeedbackCanvas from './FeedbackCanvas.vue'
+import { useCookie } from '#imports'
+import useFeedback from '../composables/useFeedback'
 
 const isOpen = ref(false)
-const feedback = reactive({
+const canvasVisible = ref(false)
+
+const categories = [
+  { id: 'bug', label: 'Report a Bug' },
+  { id: 'feature', label: 'Feature Request' },
+  { id: 'idea', label: 'Submit an Idea' },
+  { id: 'performance', label: 'Performance Issue' },
+  { id: 'usability', label: 'Usability Issue' },
+  { id: 'accessibility', label: 'Accessibility Concern' },
+  { id: 'design', label: 'Design Feedback' },
+  { id: 'content', label: 'Content Suggestion' },
+  { id: 'other', label: 'Other Feedback' }
+]
+
+const toggleCanvas = () => {
+  console.log('toggling canvas')
+  canvasVisible.value = !canvasVisible.value
+}
+
+const newFeedback = reactive({
   title: '',
-  body: ''
+  body: '',
+  category: ''
 })
 
-function toggle() {
-  isOpen.value = !isOpen.value
+const { addFeedback } = useFeedback()
+
+const userDetails = ref({
+  github: ''
+})
+
+// Use useCookie to manage the cookie for storing user details
+const userDetailsCookie = useCookie('userDetails', {
+  encode: JSON.stringify,
+  decode: JSON.parse
+})
+
+// Load existing user details from the cookie
+if (userDetailsCookie.value) {
+  userDetails.value = userDetailsCookie.value
 }
 
-function resetForm() {
-  Object.assign(feedback, {
-    title: '',
-    body: ''
-  })
-  isOpen.value = !isOpen.value
+// Function to update user details and save them to the cookie
+function updateUserDetails() {
+  userDetailsCookie.value = userDetails.value
 }
 
-function submitFeedback() {
-  console.log('Submitting feedback:', feedback)
-  try {
-    fb.createFeedback(feedback)
-    resetForm()
-  } catch (error) {
-    console.error('Error submitting feedback:', error)
-  }
+// Function to clear user details both from reactive state and cookie
+function clearUserDetails() {
+  userDetails.value = { github: '' }
+  userDetailsCookie.value = null // Clear the cookie
 }
 
+//
 </script>
 
-<style scoped></style>
+<style>
+.html {
+  margin-top: 0 !important;
+}
+</style>

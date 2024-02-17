@@ -11,6 +11,16 @@
       >
         {{ route.name }}
       </NuxtLink>
+      <!-- <DarkToggle>
+        <template #default="{ isDark, toggle }">
+          <button
+            class="icon-tool"
+            @click="toggle"
+          >
+            <UIcon :name="isDark ? 'i-heroicons-moon-16-solid' : 'i-heroicons-sun-16-solid'" />
+          </button>
+        </template>
+      </DarkToggle> -->
     </div>
     <div class="flex gap-3 justify-end items-center">
       <FeedbackWidget>
